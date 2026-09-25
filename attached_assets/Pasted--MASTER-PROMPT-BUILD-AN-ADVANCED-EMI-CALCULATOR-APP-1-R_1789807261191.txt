@@ -1,0 +1,1160 @@
+# MASTER PROMPT — BUILD AN ADVANCED EMI CALCULATOR APP
+
+## 1. ROLE
+
+Act as a senior financial-software architect, loan-calculation expert, UI/UX designer, full-stack developer, financial mathematics expert, QA engineer, and prompt/loop engineer.
+
+Build a professional, accurate, responsive EMI Calculator application that can calculate loans using:
+
+1. Flat-rate interest
+2. Reducing-balance interest
+3. Insurance financed into the loan
+4. Processing fees and other financed charges
+5. Different payment frequencies
+6. Complete amortization schedules
+7. Effective interest rate comparison
+8. Loan comparison
+9. Visual charts
+10. Downloadable reports
+
+The application must prioritize **mathematical accuracy, transparency, and explainability**.
+
+Do not merely build a basic calculator.
+
+---
+
+# 2. CORE PROBLEM
+
+Many loans are marketed using an interest rate that may be calculated differently from the way customers initially expect.
+
+For example:
+
+Loan principal:
+
+₹5,00,000
+
+Insurance premium:
+
+₹20,000
+
+Processing fee:
+
+₹5,000
+
+If insurance and/or fees are financed:
+
+Financed Loan Amount = ₹5,00,000 + ₹20,000 + ₹5,000
+
+The customer then repays the financed amount according to the applicable interest method.
+
+The application must clearly show:
+
+* Original loan amount
+* Insurance amount
+* Processing fee
+* Other financed charges
+* Total financed principal
+* Interest rate
+* Interest method
+* EMI
+* Total interest
+* Total repayment
+* Total cost of borrowing
+
+Never hide financed charges inside the loan amount.
+
+---
+
+# 3. MAIN CALCULATOR INPUTS
+
+Create a clean input interface containing:
+
+## Loan Information
+
+* Loan amount
+* Insurance premium
+* Processing fee
+* Documentation fee
+* Other charges
+* Down payment
+* Loan tenure
+* Interest rate
+* Interest calculation method
+
+Interest method options:
+
+* Reducing Balance
+* Flat Rate
+
+Allow the user to select:
+
+* Monthly
+* Quarterly
+* Half-yearly
+* Yearly
+
+as applicable.
+
+Default:
+
+Monthly repayment.
+
+---
+
+# 4. FINANCED CHARGES
+
+Provide an option for every additional charge:
+
+### Insurance
+
+Input:
+
+Insurance Premium = ₹____
+
+Checkbox:
+
+[ ] Finance insurance premium
+
+If enabled:
+
+Financed Principal = Base Loan + Insurance
+
+If disabled:
+
+Insurance is paid separately and should not increase the financed principal.
+
+### Processing Fee
+
+Input:
+
+Processing Fee = ₹____
+
+Options:
+
+[ ] Finance processing fee
+
+[ ] Pay separately
+
+### Other charges
+
+Allow:
+
+* Documentation fee
+* GST/tax on applicable fees where relevant
+* Stamp duty
+* Service charges
+* Other charges
+
+However, do not automatically assume a tax rate.
+
+Allow the user or configured jurisdiction rules to specify applicable taxes.
+
+---
+
+# 5. LOAN AMOUNT CALCULATION
+
+Show a transparent calculation.
+
+Example:
+
+Base Loan Amount
+₹5,00,000
+
+Insurance
+₹20,000
+
+Processing Fee
+₹5,000
+
+Other financed charges
+₹2,000
+
+---
+
+Total Financed Principal
+₹5,27,000
+
+Clearly distinguish:
+
+### Amount Received by Customer
+
+from
+
+### Amount on Which Interest Is Calculated
+
+These are not always the same.
+
+---
+
+# 6. REDUCING-BALANCE EMI CALCULATION
+
+For a standard monthly reducing-balance loan:
+
+P = financed principal
+
+r = periodic interest rate
+
+n = total number of installments
+
+EMI:
+
+EMI = P × r × (1+r)^n / ((1+r)^n - 1)
+
+If annual interest rate is R:
+
+r = R / 12 / 100
+
+For other frequencies, calculate the periodic rate appropriately and clearly document the assumption.
+
+For every reducing-balance calculation show:
+
+* EMI
+* Total number of payments
+* Total interest
+* Total repayment
+* Principal repaid
+* Interest paid
+
+---
+
+# 7. FLAT-RATE LOAN CALCULATION
+
+Support flat-rate loans separately.
+
+For annual flat rate R:
+
+Total Interest:
+
+Interest = Principal × R/100 × Tenure in Years
+
+Total Repayment:
+
+Total Repayment = Principal + Total Interest
+
+For monthly installments:
+
+EMI = Total Repayment / Number of Installments
+
+Example:
+
+Principal = ₹5,00,000
+
+Flat interest rate = 10%
+
+Tenure = 5 years
+
+Interest:
+
+₹5,00,000 × 10% × 5
+
+= ₹2,50,000
+
+Total repayment:
+
+₹7,50,000
+
+Monthly EMI:
+
+₹7,50,000 / 60
+
+= ₹12,500
+
+Make it very clear that a flat rate and reducing-balance rate are **not directly comparable by simply looking at the stated percentage**.
+
+---
+
+# 8. IMPORTANT RATE COMPARISON FEATURE
+
+Create a feature:
+
+## "Compare Flat Rate vs Reducing Rate"
+
+Allow the user to enter:
+
+Loan amount
+Insurance
+Fees
+Tenure
+Flat rate
+Reducing rate
+
+Then calculate both.
+
+Display:
+
+| Parameter                  | Flat Rate | Reducing Balance |
+| -------------------------- | --------: | ---------------: |
+| Financed Principal         |           |                  |
+| Interest Rate              |           |                  |
+| EMI                        |           |                  |
+| Total Interest             |           |                  |
+| Total Repayment            |           |                  |
+| Interest/Principal Ratio   |           |                  |
+| Approximate Effective Rate |           |                  |
+
+Do not label one option as "better".
+
+Instead, explain the numerical difference.
+
+---
+
+# 9. EFFECTIVE INTEREST RATE
+
+Implement an optional effective annual interest calculation.
+
+This is particularly important when:
+
+* Insurance is financed
+* Processing fees are financed
+* Other charges are financed
+* The customer receives less cash than the nominal financed principal
+* Flat-rate interest is used
+
+Calculate the effective annualized borrowing cost using cash-flow analysis / IRR or XIRR as appropriate.
+
+For example:
+
+Customer receives:
+
+₹5,00,000
+
+But repayment is calculated on:
+
+₹5,27,000
+
+The application should not simply report the nominal loan rate as the customer's total borrowing cost.
+
+Show:
+
+### Nominal Interest Rate
+
+and
+
+### Approximate Effective Annual Rate
+
+separately.
+
+Clearly explain the assumptions used.
+
+---
+
+# 10. INSURANCE ANALYSIS
+
+Create a dedicated insurance section.
+
+Inputs:
+
+* Insurance premium
+* Is insurance financed?
+* Insurance payment method
+* Insurance tax if applicable
+* Insurance duration
+
+Calculate:
+
+### If insurance is financed
+
+Insurance increases principal.
+
+Interest may consequently be charged on the financed insurance amount according to the loan terms.
+
+Show:
+
+Insurance premium
++
+Interest attributable to financed insurance
+===========================================
+
+Estimated total cost of financed insurance
+
+Do not assume that every lender charges interest on insurance in the same way.
+
+Allow lender-specific configuration.
+
+---
+
+# 11. AMORTIZATION SCHEDULE
+
+Generate a complete amortization table.
+
+Columns:
+
+| Period | Opening Balance | EMI | Principal | Interest | Insurance/Fees | Closing Balance |
+| ------ | --------------: | --: | --------: | -------: | -------------: | --------------: |
+
+For reducing-balance loans:
+
+Interest for period:
+
+Opening Balance × Periodic Interest Rate
+
+Principal component:
+
+EMI − Interest
+
+Closing balance:
+
+Opening Balance − Principal
+
+For the final installment, handle rounding correctly so that the balance becomes exactly zero rather than showing a small residual caused by floating-point rounding.
+
+---
+
+# 12. FLAT-RATE AMORTIZATION
+
+For flat-rate loans, show the interest allocation transparently.
+
+Do not incorrectly apply reducing-balance formulas to flat-rate loans.
+
+Provide:
+
+* Period number
+* EMI
+* Principal component
+* Interest component
+* Remaining balance
+
+Clearly indicate that the flat-rate interest calculation is based on the original principal rather than the declining balance, according to the configured flat-rate model.
+
+---
+
+# 13. PREPAYMENT CALCULATOR
+
+Add an optional prepayment module.
+
+Inputs:
+
+* Current outstanding principal
+* Prepayment amount
+* Prepayment date
+* Prepayment charge
+* Remaining tenure
+* Interest rate
+
+Provide two possible scenarios:
+
+### Option A — Reduce EMI
+
+Keep remaining tenure approximately unchanged.
+
+### Option B — Reduce Tenure
+
+Keep EMI approximately unchanged.
+
+Show:
+
+* Original remaining interest
+* Revised interest
+* Estimated interest saved
+* Revised EMI or revised tenure
+* Prepayment fee
+* Net financial impact
+
+Clearly identify that actual lender prepayment rules may differ.
+
+---
+
+# 14. EMI BREAKDOWN
+
+Display a prominent summary card:
+
+### Loan Summary
+
+Base Loan:
+₹____
+
+Insurance:
+₹____
+
+Financed Fees:
+₹____
+
+Total Financed Principal:
+₹____
+
+Interest Rate:
+____ %
+
+Interest Method:
+Reducing / Flat
+
+Tenure:
+____ months
+
+EMI:
+₹____
+
+Total Interest:
+₹____
+
+Total Repayment:
+₹____
+
+Total Additional Charges:
+₹____
+
+Total Cost:
+₹____
+
+---
+
+# 15. VISUALIZATION
+
+Create charts.
+
+## Chart 1 — Principal vs Interest
+
+Pie/donut chart showing:
+
+* Principal
+* Interest
+
+## Chart 2 — Loan Balance
+
+Line chart:
+
+Month → Outstanding balance
+
+## Chart 3 — EMI Composition
+
+Stacked visualization:
+
+Principal component
++
+Interest component
+
+## Chart 4 — Flat vs Reducing
+
+Compare:
+
+* EMI
+* Total interest
+* Total repayment
+* Effective rate
+
+Charts must update automatically whenever inputs change.
+
+---
+
+# 16. LOAN COMPARISON
+
+Allow users to compare multiple loans.
+
+Example:
+
+Loan A:
+₹5 lakh
+10% flat
+5 years
+
+Loan B:
+₹5 lakh
+12% reducing
+5 years
+
+Loan C:
+₹5 lakh
+11% reducing
+5 years
+₹20,000 financed insurance
+
+Show all calculations side by side.
+
+Do not rank the loans as "best" or "worst".
+
+Present objective numerical differences so the user can decide.
+
+---
+
+# 17. LENDER-SPECIFIC SETTINGS
+
+Create an advanced configuration system.
+
+Different lenders may calculate loans differently.
+
+Allow configuration of:
+
+* Interest calculation method
+* Interest compounding frequency
+* EMI frequency
+* First EMI date
+* Grace period
+* Processing fee
+* Insurance financing
+* Taxes
+* Prepayment charges
+* Rounding rules
+* Day-count convention
+* Part-prepayment rules
+
+Do not assume that all loans follow the same formula.
+
+---
+
+# 18. DATES
+
+Allow:
+
+* Loan disbursement date
+* First EMI date
+* Tenure
+* EMI date
+
+For advanced mode, support actual calendar dates.
+
+Provide optional XIRR-based effective rate calculations when payment dates are irregular.
+
+Do not silently treat all loans as exactly 30-day periods.
+
+---
+
+# 19. ROUNDING
+
+Financial calculations require careful rounding.
+
+Internally:
+
+* Use sufficient numerical precision.
+* Avoid premature rounding.
+* Round displayed currency values to the appropriate currency precision.
+* Adjust final EMI/payment where necessary to eliminate residual balance.
+
+Provide a calculation audit mode showing intermediate values.
+
+---
+
+# 20. CURRENCIES
+
+Initially support:
+
+* INR
+* USD
+* GBP
+* EUR
+* CAD
+* AUD
+
+Design the currency system so more currencies can be added.
+
+Do not use live exchange rates unless an exchange-rate service is explicitly connected.
+
+---
+
+# 21. REPORT GENERATION
+
+Allow users to download:
+
+### PDF Loan Report
+
+Include:
+
+* Customer-entered information
+* Loan amount
+* Insurance
+* Fees
+* Financed principal
+* Interest method
+* Interest rate
+* EMI
+* Total interest
+* Total repayment
+* Effective annual rate
+* Amortization schedule
+* Charts
+* Assumptions
+* Disclaimer
+
+Also support:
+
+* CSV
+* Excel
+* Print
+
+---
+
+# 22. MOBILE APP / RESPONSIVE WEB APP
+
+The calculator must work on:
+
+* Desktop
+* Laptop
+* Tablet
+* Android
+* iPhone
+
+Use a mobile-first responsive design.
+
+On mobile:
+
+Inputs should be easy to enter.
+
+Results should be displayed prominently.
+
+The amortization table should support horizontal scrolling or a suitable responsive layout.
+
+---
+
+# 23. USER EXPERIENCE
+
+Create a professional interface.
+
+Main navigation:
+
+Home
+Calculator
+Loan Comparison
+Amortization
+Prepayment
+Reports
+Settings
+
+Homepage should have:
+
+## EMI Calculator
+
+Loan Amount
+[ ₹________ ]
+
+Insurance
+[ ₹________ ]
+
+Processing Fee
+[ ₹________ ]
+
+Other Charges
+[ ₹________ ]
+
+Interest Method
+[ Reducing Balance ▼ ]
+
+Interest Rate
+[ ____ % ]
+
+Tenure
+[ ____ months ]
+
+[ Calculate EMI ]
+
+---
+
+# 24. REAL-TIME CALCULATION
+
+Whenever an input changes, optionally update:
+
+* EMI
+* Total interest
+* Total repayment
+* Effective rate
+* Charts
+
+Provide a Calculate button as well.
+
+Prevent:
+
+* NaN
+* Infinity
+* Negative loan amounts
+* Negative tenure
+* Invalid interest rates
+* Invalid dates
+
+Display friendly validation messages.
+
+---
+
+# 25. EXPLANATION ENGINE
+
+Do not merely provide numbers.
+
+After calculating, explain:
+
+### Example
+
+"Your base loan is ₹5,00,000. You have chosen to finance ₹20,000 insurance and ₹5,000 processing fees, so the financed principal is ₹5,25,000.
+
+At a reducing-balance rate of 12% for 60 months, the estimated EMI is ₹____.
+
+Your estimated total interest is ₹____ and total repayment is ₹____.
+
+The insurance and financed fees increase the amount on which interest may be calculated under the selected loan model."
+
+Use actual calculated numbers rather than placeholders.
+
+---
+
+# 26. IMPORTANT FINANCIAL DISCLOSURE
+
+Display:
+
+"This calculator provides estimates based on the assumptions entered by the user. Actual lender calculations may differ because of lender-specific rules, taxes, fees, insurance treatment, payment dates, rounding, compounding conventions, prepayment rules, and other contractual terms."
+
+Do not claim that the calculation is an exact representation of every lender.
+
+---
+
+# 27. ADMIN / CONFIGURATION SYSTEM
+
+If this becomes a SaaS application, provide an admin panel allowing administrators to configure:
+
+* Supported currencies
+* Loan types
+* Interest methods
+* Default assumptions
+* Fee types
+* Insurance rules
+* Tax rules
+* Lender profiles
+* Calculation formulas
+* Disclaimers
+* Branding
+* Advertisement placements
+* User analytics
+
+Do not allow non-technical administrators to modify mathematical formulas without validation.
+
+---
+
+# 28. OPTIONAL LENDER DATABASE
+
+Create a lender database architecture.
+
+Fields:
+
+* Lender name
+* Country
+* Loan type
+* Interest method
+* Nominal rate
+* Processing fee
+* Insurance requirement
+* Insurance financing
+* Prepayment rules
+* Minimum loan
+* Maximum loan
+* Minimum tenure
+* Maximum tenure
+* Calculation notes
+* Source/reference
+* Last verified date
+
+Important:
+
+Do not populate lender rates with invented or outdated values.
+
+Rates must have a source and verification date.
+
+---
+
+# 29. SEO
+
+If this is a public web application, optimize for search.
+
+Pages:
+
+* EMI Calculator
+* Flat Rate EMI Calculator
+* Reducing Balance EMI Calculator
+* Loan EMI Calculator
+* Personal Loan EMI Calculator
+* Car Loan EMI Calculator
+* Home Loan EMI Calculator
+* Flat vs Reducing Interest Calculator
+* Loan Insurance Calculator
+* Effective Interest Rate Calculator
+* Amortization Calculator
+* Prepayment Calculator
+
+Create useful explanatory content rather than keyword stuffing.
+
+---
+
+# 30. TECHNICAL REQUIREMENTS
+
+Preferred stack:
+
+Frontend:
+
+* Next.js
+* React
+* TypeScript
+* Tailwind CSS
+
+Backend:
+
+* Node.js / TypeScript
+
+Database if required:
+
+* PostgreSQL
+
+Charts:
+
+* Recharts or another suitable library
+
+PDF:
+
+* Appropriate server-side PDF generation library
+
+Use a clean modular calculation engine so the financial formulas are independent from the UI.
+
+For example:
+
+calculateFinancedPrincipal()
+
+calculateReducingEMI()
+
+calculateFlatRateInterest()
+
+calculateFlatRateEMI()
+
+generateAmortizationSchedule()
+
+calculateEffectiveRate()
+
+calculatePrepayment()
+
+calculateLoanComparison()
+
+---
+
+# 31. CALCULATION ENGINE ARCHITECTURE
+
+Create a pure calculation layer.
+
+Example:
+
+LoanInput
+↓
+Validate Input
+↓
+Calculate Charges
+↓
+Calculate Financed Principal
+↓
+Select Interest Model
+↓
+Calculate EMI
+↓
+Generate Amortization
+↓
+Calculate Totals
+↓
+Calculate Effective Rate
+↓
+Generate Results
+↓
+UI
+
+The calculation engine must be testable independently of the user interface.
+
+---
+
+# 32. TEST CASES
+
+Before declaring the application complete, test at least:
+
+### Test 1
+
+₹5,00,000
+10% reducing
+60 months
+
+### Test 2
+
+₹5,00,000
+10% flat
+60 months
+
+### Test 3
+
+₹5,00,000
+₹20,000 insurance financed
+10% reducing
+60 months
+
+### Test 4
+
+₹5,00,000
+₹20,000 insurance paid separately
+10% reducing
+60 months
+
+### Test 5
+
+₹5,00,000
+₹20,000 insurance
+₹5,000 processing fee
+12% reducing
+60 months
+
+### Test 6
+
+Zero insurance.
+
+### Test 7
+
+Zero processing fee.
+
+### Test 8
+
+Very short loan: 1 month.
+
+### Test 9
+
+Long loan: 360 months.
+
+### Test 10
+
+Decimal interest rate.
+
+### Test 11
+
+Prepayment.
+
+### Test 12
+
+Final amortization balance must equal zero within the defined rounding tolerance.
+
+Cross-check the calculations against independently calculated reference values.
+
+---
+
+# 33. SELF-CHECKING LOOP
+
+For every financial calculation:
+
+STEP 1:
+Calculate using the primary formula.
+
+STEP 2:
+Calculate using an independent method.
+
+STEP 3:
+Compare the results.
+
+STEP 4:
+If the difference exceeds the defined tolerance, investigate.
+
+STEP 5:
+Check edge cases.
+
+STEP 6:
+Check rounding.
+
+STEP 7:
+Check the amortization schedule.
+
+STEP 8:
+Confirm:
+
+Sum of principal components ≈ financed principal
+
+Sum of interest components ≈ total interest
+
+Sum of payments ≈ total repayment
+
+Final balance ≈ zero
+
+STEP 9:
+Only then display the result.
+
+Never silently accept a calculation that fails validation.
+
+---
+
+# 34. DEVELOPMENT LOOP
+
+Do not build the entire application blindly.
+
+Work through these stages:
+
+### Stage 1
+
+Architecture and calculation specification.
+
+### Stage 2
+
+Implement calculation engine.
+
+### Stage 3
+
+Unit-test all formulas.
+
+### Stage 4
+
+Build basic UI.
+
+### Stage 5
+
+Connect UI to calculation engine.
+
+### Stage 6
+
+Build amortization schedule.
+
+### Stage 7
+
+Add charts.
+
+### Stage 8
+
+Add comparison functionality.
+
+### Stage 9
+
+Add prepayment functionality.
+
+### Stage 10
+
+Add PDF/CSV/Excel reports.
+
+### Stage 11
+
+Add advanced lender configuration.
+
+### Stage 12
+
+Perform complete regression testing.
+
+At each stage:
+
+BUILD → TEST → FIND ERRORS → FIX → RETEST → VALIDATE → PROCEED
+
+Never proceed to the next major stage while critical calculation errors remain.
+
+---
+
+# 35. FINAL REQUIREMENT
+
+The application must make one thing extremely clear:
+
+## "What is the customer's actual cost of borrowing?"
+
+Do not focus only on EMI.
+
+Show the complete picture:
+
+Base Loan
++
+Insurance
++
+Financed Fees
++
+Interest
++
+Other applicable charges
+========================
+
+Total Cost
+
+And separately show:
+
+Amount actually received by customer
+
+versus
+
+Total amount repaid by customer.
+
+Start by producing the complete technical architecture, financial formula specification, database design if required, UI wireframe, and test cases.
+
+Do not start with large amounts of code until the calculation specification has been validated.
