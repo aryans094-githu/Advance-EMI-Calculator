@@ -1,0 +1,57 @@
+name: Build EMI Calculator APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install pnpm
+        run: npm install --global pnpm@10
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Build EMI Calculator
+        run: pnpm --filter @workspace/emi-calculator build
+        env:
+          PORT: 4173
+          BASE_PATH: ./
+
+      - name: Add Android platform
+        run: pnpm exec cap add android
+
+      - name: Sync web app into Android
+        run: pnpm exec cap sync android
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Build APK
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --stacktrace
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: EMI-Calculator-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
